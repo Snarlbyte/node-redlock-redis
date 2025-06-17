@@ -25,12 +25,14 @@ Redlock is designed to use [ioredis](https://github.com/luin/ioredis) to keep it
 A redlock object is instantiated with an array of at least one redis client and an optional `options` object. Properties of the Redlock object should NOT be changed after it is first used, as doing so could have unintended consequences for live locks.
 
 ```ts
-import Client from "ioredis";
+import redis from "redis";
 import Redlock from "redlock";
 
-const redisA = new Client({ host: "a.redis.example.com" });
-const redisB = new Client({ host: "b.redis.example.com" });
-const redisC = new Client({ host: "c.redis.example.com" });
+// Create Redis client
+const client = redis.createClient({
+  url: REDIS_URL,
+  enable_offline_queue: false,
+});
 
 const redlock = new Redlock(
   // You should have one client for each independent redis node
